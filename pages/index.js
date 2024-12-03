@@ -27,7 +27,7 @@ export default function Home() {
             <button className="verify-button" onClick={handleVerifyClick}>
               Verify
             </button>
-            <p className="powered-by">Powered by msCaptcha</p>
+            <p className="powered-by">Powered by rnCaptcha</p>
           </div>
         )}
 
